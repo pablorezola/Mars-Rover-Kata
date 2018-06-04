@@ -1,2 +1,2 @@
 # Mars-Rover-Kata
-Mars Rover exercise for Ironhack
+Mars Rover Kata exercise for Ironhack 
