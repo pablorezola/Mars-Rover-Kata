@@ -166,11 +166,11 @@ function Commands (rover, rover2) {
 
 
 function Map (rover, rover2){ 
-if((rover.x < 0 && rover.x > 9) && (rover.y < 0 && rover.y > 9)){
-	console.log("rover is out of the map.");
+if((rover.x < 0,0 && rover.x > 0,9) || (rover.y < 0,0 && rover.y > 9,9)){
+	console.log("Rover is out of the map.");
 }
-else if((rover2.x < 0 && rover2.x > 9) && (rover2.y < 0 && rover2.y > 9)){
-	console.log("rover is out of the map.");
+if((rover2.x < 0,0 && rover2.x > 0,9) || (rover2.y < 0 && rover2.y > 9,9)){
+	console.log("Rover2 is out of the map.");
 } else {
 	 checkObstacles (rover, rover2);
 	 CoordinatesLog (rover, rover2);
@@ -192,7 +192,7 @@ function printCoordinates (rover, rover2) {
 
 function getCoordinates(rover, rover2){
   var coordinates = "("+rover.x+","+rover.y+")";
-  var coordinates ="("+rover2.x+","+rover2.y+")";
+  var coordinatea = "("+rover2.x+","+rover2.y+")";
   return coordinates;
 }
 
