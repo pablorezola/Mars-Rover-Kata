@@ -1,6 +1,6 @@
 var rover = {
 	   name: "Rover",
-       direction: "S",
+       direction: " N",
         x: 0,
         y: 0,
         obstacle: [[2,7], [5,5], [6,0], [0,4], [1,2], [4,9]],
@@ -20,50 +20,50 @@ var rover2 = {
        travelLog:["(7,7)"], 
 };
 
-var grid = [
-  ["Rover",null,null,null,"Rock4",null,null,null,null,null],   
-  [null,null,"Rock5",null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null,"Rock1",null,null],
+var obstacles = [
+  ["Rover",null,null,null,"Rock",null,null,null,null,null],   
+  [null,null,"Rock",null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,"Rock",null,null],
   [null,null,null,null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null,null,null,"Rock6"],
-  [null,null,null,null,null,"Rock2",null,null,null,null],
-  ["Rock3",null,null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null,null,"Rock"],
+  [null,null,null,null,null,"Rock",null,null,null,null],
+  ["Rock",null,null,null,null,null,null,null,null,null],
   [null,null,null,null,null,null,null,"Rover2",null,null],
   [null,null,null,null,null,null,null,null,null,null],
   [null,null,null,null,null,null,null,null,null,null],    
 ];
 
 
-var obstacles = [
+var Rock = [
 
-    { "name": "Rock1",
+    { "name": "Rock",
       "position": [2,7]
     },
 
-    { "name": "Rock2",
+    { "name": "Rock",
       "position": [5,5]
     },
 
-    { "name": "Rock3",
+    { "name": "Rock",
       "position": [6,0]
     },
 
-    { "name": "Rock4",
+    { "name": "Rock",
       "position": [0,4]
     },
 
-    { "name": "Rock5",
+    { "name": "Rock",
       "position": [1,2]
     },
 
-    { "name": "Rock6",
+    { "name": "Rock",
       "position": [4,9]
     }
 
   ];
 
 
-function turnLeft(rover, rover2) {
+function turnLeft(rover) {
 	switch (rover.direction) {
        case "N":
         rover.direction = "W"
@@ -79,11 +79,26 @@ function turnLeft(rover, rover2) {
         break;
      }
 
+     switch (rover2.direction) {
+       case "N":
+        rover2.direction = "W"
+        break;
+       case "S":
+        rover2.direction = "E"
+        break;
+       case "E":
+        rover2.direction = "N"
+        break;
+       case "W":
+        rover2.direction = "S"   
+        break;
+     }
+
   console.log("Rover turns to: " + rover.direction);
-  	
+  console.log("Rover2 turns to: " + rover2.direction);
   }
 
-function turnRight(rover, rover2) { 
+function turnRight(rover) { 
      switch (rover.direction) { 
       case "N":
       rover.direction = "E"
@@ -98,53 +113,134 @@ function turnRight(rover, rover2) {
       rover.direction = "N"
       break;
     }
+    switch (rover2.direction) {
+       case "N":
+        rover2.direction = "W"
+        break;
+       case "S":
+        rover2.direction = "E"
+        break;
+       case "E":
+        rover2.direction = "N"
+        break;
+       case "W":
+        rover2.direction = "S"   
+        break;
+     }
 
   console.log("Rover turns to: " + rover.direction);
   console.log("Rover2 turns to: " + rover2.direction);
 }
 
 
-function moveForward(rover, rover2){
+function moveForward(rover){
 	switch(rover.direction) {
       case "N":
-      rover.y = rover.y-1
+      if (rover.y <= 0) {
+        console.log("Rover is out of the map in the North");
+        return false;
+      }
+      if (isObstacle(rover.x, (rover.y - 1))){
+        return false;
+      }
+      rover.y = rover.y--;
       break;
     case "S":
-      rover.y = rover.y+1
+      if(rover.y >= 9) {
+        console.log("Rover is out of the map in the South");
+        return false;
+      }
+      if(isObstacle(rover.x, (rover.y + 1))){
+        return false;
+      }
+      rover.y = rover.y++;
       break;
     case "E":
-      rover.x = rover.x+1
+      if(rover.x >= 9) {
+        console.log("Rover is out of the map in the East");
+        return false;
+      }
+      if (isObstacle((rover.x + 1), rover.y)){
+        return false;
+      }
+      rover.x = rover.x++;
       break;
     case "W":
-      rover.x = rover.x-1
+      if(rover.x <= 0) {
+        console.log("Rover is out of the map in the West");
+        return false;
+      }
+      if(isObstacle((rover.x - 1), rover.y)){
+        return false;
+      }
+      rover.x = rover.x--;
       break;
   }
-
-   Map(rover, rover2, "forward");
+  Map(rover, rover2, "forward");
+  return true;
 }
 
 
-function moveBackwards(rover, rover2) {
+function moveBackwards(rover) {
 	switch (rover.direction) {
         case "N":
-          rover.y = rover.y+1
+         if(rover.y >= 9){
+          console.log("Rover is oi¡ut of the map in the South");
+          return false;
+        }
+        if (isObstacle(rover.x, (rover.y + 1))) {
+        return false;
+      }
+        rover.y = rover.y++;
             break;
         case "S":
-          rover.y = rover.y-1
+        if (rover.y <= 0) {
+        console.log("Rover is out of the map in the North");
+        return false;
+      }
+      if (isObstacle(rover.x, (rover.y - 1))) {
+        return false;
+      }
+          rover.y = rover.y--;
             break;
         case "E":
-          rover.x = rover.x-1
+        if(rover.x <= 0) {
+        console.log("Rover is out of the map in the West");
+        return false;
+      }
+      if (isObstacle((rover.x - 1), rover.y)) {
+        return false;
+      }
+          rover.x = rover.x--;
             break;
         case "W":
-          rover.x = rover.x+1
+        if(rover.x >= 9) {
+        console.log("Rover is out of the map in the East");
+        return false;
+      }
+      if (isObstacle((rover.x + 1), rover.y)) {
+        return false;
+      }
+          rover.x = rover.x++;
             break;
-    }
-      Map(rover, rover2, "backwards");
-  }
+}
 
+      Map(rover, rover2, "backwards");
+  return true;
+
+}
+
+
+function isObstacle(x,y) {
+  if(obstacles[y][x] == "Rock") {
+    console.log('Obstacle in (' + y + ',' + x +') be careful!!');
+    return true;
+  }
+  return false;
+}
 
 function Commands (rover, rover2) {
-	var command = prompt( "Hi operator! Give me the sequence of commands to move the rover. Use f (forward), b (backward), l (lleft) or r (right).");
+	var command = prompt( "Hi operator! Give me the sequence of commands to move the rover. Use f (forward), b (backwards), l (left) or r (right).");
     command = command.split("");
 	for (var i = 0; i < command.length; i++) {
 		if (command[i] == "f") {
@@ -163,20 +259,11 @@ function Commands (rover, rover2) {
 
 }
 
-
-
-function Map (rover, rover2){ 
-if((rover.x < 0,0 && rover.x > 0,9) || (rover.y < 0,0 && rover.y > 9,9)){
-	console.log("Rover is out of the map.");
+function Map (rover, rover2){
+  CoordinatesLog (rover, rover2);
+  printCoordinates(rover, rover2);
 }
-if((rover2.x < 0,0 && rover2.x > 0,9) || (rover2.y < 0 && rover2.y > 9,9)){
-	console.log("Rover2 is out of the map.");
-} else {
-	 checkObstacles (rover, rover2);
-	 CoordinatesLog (rover, rover2);
-	}
-	printCoordinates(rover, rover2);
-}
+
 
 function CoordinatesLog (rover, rover2) {
 	var coordinates = getCoordinates(rover, rover2);
@@ -196,12 +283,4 @@ function getCoordinates(rover, rover2){
   return coordinates;
 }
 
-function checkObstacles(rover, rover2){
-  var roverCoordinates = getCoordinates(rover, rover2);
-  if(obstacles.includes(roverCoordinates)){
-    console.log("Obstacle in: "+roverCoordinates);
-    console.log("Obstacle in: "+rover2Coordinates);
-  }
-}
-
-Commands (rover, rover2)
+Commands (rover, rover2);
